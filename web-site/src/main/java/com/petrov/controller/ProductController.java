@@ -24,19 +24,35 @@ public class ProductController {
         return "products";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/edit")
     public String editProduct(@PathVariable("id") Long id, Model model) {
         Product product = productRepository.findById(id);
         model.addAttribute("product", product);
+        return "editProduct";
+    }
+
+    @GetMapping("/add")
+    public String addProduct(Model model) {
         return "product";
     }
 
-    @PostMapping("/update")
-    public String updateProduct(Product product) {
-        // TODO написать метод userRepository.update();
+    @PostMapping("product/add")
+    public String addNewProduct(@RequestParam Long id, @RequestParam String title, @RequestParam int cost, Model model) {
+        Product product = new Product(id,title,cost);
+        productRepository.insert(product);
         return "redirect:/product";
-
-
     }
 
+    @PostMapping("product/{id}/edit")
+    public String updateProduct(@RequestParam Long id, @RequestParam String title, @RequestParam int cost, Model model) {
+        Product product = productRepository.update(id,title,cost);
+        model.addAttribute("product", product);
+        return "redirect:/product";
+    }
+
+    @PostMapping("product/{id}/remove")
+    public String removeProduct(@RequestParam Long id, Model model) {
+        productRepository.remove(id);
+        return "redirect:/product";
+    }
 }

@@ -22,15 +22,22 @@ public class ProductRepository {
                 return new Product(p.getId(), p.getTitle(), p.getCost());
             }
         }
-        return new Product(-1, "", 0);
+        return null;
     }
 
     public void insert(Product product) {
-        products.add(product);
+        products.add(new Product(product.getId(),product.getTitle(),product.getCost()));
     }
 
-    public Product update(Product product){
-        return null;
+    public Product update(Long id,String title, int cost){
+        Product product = findById(id);
+        product.setTitle(title);
+        product.setCost(cost);
+        return product;
+    }
+
+    public void remove(Long id){
+        products.remove(findById(id));
     }
 
 
