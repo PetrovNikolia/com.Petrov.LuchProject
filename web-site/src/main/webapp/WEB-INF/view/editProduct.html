@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
-    <title>New Product</title>
+    <title>EShop application</title>
 </head>
 
 <body>
@@ -35,16 +35,16 @@
 <div class="container">
     <div class="row py-2">
         <div class="col-12">
-            <form th:action="@{product/add}" method="post">
+            <form th:action="@{/product/{id}/edit}" method="post" th:object="${product}">
                 <div class="form-group">
                     <label>Id</label>
-                    <input type="number" name="id" class="form-control"  placeholder="Enter id">
+                    <input type="number" th:field="*{id}" name="id" class="form-control"  placeholder="Enter id">
                     <label>Title</label>
-                    <input type="text" name="title" class="form-control"  placeholder="Enter title">
+                    <input type="text" th:field="*{title}" name="title" class="form-control"  placeholder="Enter title">
                     <label>Cost</label>
-                    <input type="number" name="cost" class="form-control"  placeholder="Enter cost">
+                    <input type="number" th:field="*{cost}" name="cost" class="form-control"  placeholder="Enter cost">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Refresh</button>
             </form>
         </div>
     </div>
