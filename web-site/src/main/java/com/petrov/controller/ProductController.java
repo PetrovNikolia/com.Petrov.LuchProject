@@ -35,6 +35,8 @@ public class ProductController {
     public String updateProduct(Product product) {
         // TODO написать метод userRepository.update();
         return "redirect:/product";
+
+
     }
 
 }
