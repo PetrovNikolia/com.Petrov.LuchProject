@@ -29,15 +29,16 @@ public class ProductRepository {
         products.add(new Product(product.getId(),product.getTitle(),product.getCost()));
     }
 
-    public Product update(Long id,String title, int cost){
-        Product product = findById(id);
+    public void update(Long id,String title, int cost){
+        Product product =findById(id);
         product.setTitle(title);
         product.setCost(cost);
-        return product;
+        products.set((int) product.getId(),new Product(product.getId(),product.getTitle(),product.getCost()));
     }
 
     public void remove(Long id){
-        products.remove(findById(id));
+        Product product = findById(id);
+        products.remove(product.getId());
     }
 
 
