@@ -43,14 +43,13 @@ public class ProductController {
         return "redirect:/product";
     }
 
-    @PostMapping("product/{id}/edit")
+    @PostMapping("{id}/edit")
     public String updateProduct(@RequestParam Long id, @RequestParam String title, @RequestParam int cost, Model model) {
-        Product product = productRepository.update(id,title,cost);
-        model.addAttribute("product", product);
+        productRepository.update(id,title,cost);
         return "redirect:/product";
     }
 
-    @PostMapping("product/{id}/remove")
+    @PostMapping("{id}/remove")
     public String removeProduct(@RequestParam Long id, Model model) {
         productRepository.remove(id);
         return "redirect:/product";
