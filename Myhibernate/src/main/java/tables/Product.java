@@ -17,21 +17,26 @@ public class Product {
     @Column
     private Integer cost;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Orders",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<User> users;
-
-    public List<User> getUsers() {
-        return users;
+    @Override
+    public String toString() {
+        return "Product{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", cost=" + cost +
+               '}';
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public User getUser() {
+        return user;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Product(Integer id, String name, Integer cost) {
         this.id = id;
