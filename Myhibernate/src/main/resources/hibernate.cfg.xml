@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/Myhibernate?createDatabaseIfNotExist=true</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/Myhibernate?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</property>
         <property name="connection.username">root</property>
         <property name="connection.password">kintep</property>
         <property name="connection.pool_size">1</property>
@@ -24,5 +24,6 @@
         <property name="hibernate.jdbc.batch_size">10</property>
 
         <mapping class="tables.User"/>
+        <mapping class="tables.Product"/>
     </session-factory>
 </hibernate-configuration>
