@@ -44,21 +44,25 @@ public class Main {
 //        em.getTransaction().commit();
 
 
-        //Какие товары у пользователя
-        User user = em.find(User.class, 1);
-        System.out.println(user.getProducts());
-
-        //Кто купил определенный товар
-        Product product = em.find(Product.class, 1);
-        System.out.println(product.getUser());
-        //DELETE
-//        em.getTransaction().begin();
+//        //Какие товары у пользователя
 //        User user = em.find(User.class, 1);
-//        em.remove(user);
-//        em.flush();
-//        em.clear();
-//        em.getTransaction().commit();
-//        em.close();
+//        System.out.println(user.getProducts());
+//
+//        //Кто купил определенный товар
+//        Product product = em.find(Product.class, 2);
+//        System.out.println(product.getUser());
+//
+//        user.removeProduct(product);
+//
+//        System.out.println(user.getProducts());
+//        em.getTransaction().begin();
+
+        em.getTransaction().begin();
+        User user = em.find(User.class, 1);
+        em.remove(user);
+
+        em.getTransaction().commit();
+        em.close();
 
 
     }

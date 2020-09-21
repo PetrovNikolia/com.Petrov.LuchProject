@@ -1,18 +1,32 @@
-package com.petrov.persistance;
+package com.petrov.persist.entity;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "products")
 public class Product {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column
     private String title;
+
+    @Column
     private int cost;
 
-    public Product(long id, String title, int cost) {
+    public Product() {
+    }
+
+    public Product(Integer id, String title, int cost) {
         this.id = id;
         this.title = title;
         this.cost = cost;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -24,7 +38,7 @@ public class Product {
         return cost;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

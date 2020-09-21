@@ -1,57 +1,84 @@
 package com.petrov.controller;
 
-import com.petrov.persistance.Product;
-import com.petrov.persistance.ProductRepository;
+import com.petrov.persist.entity.Product;
+import com.petrov.persist.repo.ProductRepository;
+import com.petrov.persist.repo.ProductSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+
 
     @Autowired
     private ProductRepository productRepository;
 
 
     @GetMapping
-    public String allProduct(Model model) {
-        List<Product> allProduct = productRepository.getAllProduct();
-        model.addAttribute("products", allProduct);
+    public String allProduct(Model model,
+                             @RequestParam(value = "sort", required = false) String sort,
+                             @RequestParam(value = "max", required = false) Integer max,
+                             @RequestParam(value = "min", required = false) Integer min,
+                             @RequestParam("page") Optional<Integer> page,
+                             @RequestParam("size") Optional<Integer> size) {
+
+        PageRequest pageRequest;
+        if( sort==null ||sort.isEmpty()){
+            pageRequest = PageRequest.of(page.orElse(1) - 1, size.orElse(4), Sort.by(Sort.Direction.ASC, "id"));
+        } else {
+            pageRequest = PageRequest.of(page.orElse(1) - 1, size.orElse(4), Sort.by(Sort.Direction.ASC, String.valueOf(sort)));
+        }
+
+
+        Specification<Product> spec = ProductSpecification.trueLiteral();
+
+        if(max!=null){
+            spec.and(ProductSpecification.priceLesserOrEqualsThan(max));
+        }
+        if(min!=null){
+            spec.and(ProductSpecification.priceGreaterOrEqualsThan(min));
+        }
+
+        model.addAttribute("products", productRepository.findAll(spec,pageRequest));
         return "products";
     }
 
-    @GetMapping("/{id}/edit")
-    public String editProduct(@PathVariable("id") Long id, Model model) {
-        Product product = productRepository.findById(id);
+    @GetMapping("/{id}")
+    public String editProduct(@PathVariable("id") Integer id, Model model) {
+        Product product = productRepository.findById(id).get();
         model.addAttribute("product", product);
-        return "editProduct";
+        return "product";
     }
 
     @GetMapping("/add")
     public String addProduct(Model model) {
+        Product product = new Product();
+        model.addAttribute("product", product);
         return "product";
     }
 
-    @PostMapping("product/add")
-    public String addNewProduct(@RequestParam Long id, @RequestParam String title, @RequestParam int cost, Model model) {
-        Product product = new Product(id,title,cost);
-        productRepository.insert(product);
+    @PostMapping("/update")
+    public String updateProduct(@Valid Product product, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "product";
+        }
+        productRepository.save(product);
         return "redirect:/product";
     }
 
-    @PostMapping("{id}/edit")
-    public String updateProduct(@RequestParam Long id, @RequestParam String title, @RequestParam int cost, Model model) {
-        productRepository.update(id,title,cost);
-        return "redirect:/product";
-    }
-
-    @PostMapping("{id}/remove")
-    public String removeProduct(@RequestParam Long id, Model model) {
-        productRepository.remove(id);
+    @DeleteMapping("{id}/remove")
+    public String removeProduct(@RequestParam Integer id) {
+        productRepository.deleteById(id);
         return "redirect:/product";
     }
 }
